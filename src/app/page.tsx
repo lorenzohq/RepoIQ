@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { c, mono, serif, SHELL } from "@/lib/theme";
+import { c, fluid, mono, serif, shell } from "@/lib/theme";
 
 const HEAT_COLORS = ["#ebedf0", "#9be9a8", "#40c463", "#30a14e", "#216e39"];
 
@@ -58,11 +58,7 @@ const candidates = [
     { rank: "04", name: "David Ochieng", handle: "@d-ochieng", score: 62, scoreColor: c.bar, strength: "DevOps — scripting", commits: "96", impact: "LOW", impactColor: "oklch(55% 0.015 60)" },
 ];
 
-const SHORTLIST_COLS = "40px 2fr 1fr 1.5fr 1fr 1fr";
-
 const eyebrow: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
     fontFamily: mono,
     fontSize: 12,
     letterSpacing: "0.06em",
@@ -73,9 +69,9 @@ export default function Landing() {
     return (
         <div style={{ color: c.ink, background: c.canvas, width: "100%", overflowX: "hidden" }}>
             {/* TOP BAR */}
-            <header style={{ ...SHELL, padding: "26px 80px", display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+            <header className="rq-header" style={shell("26px")}>
                 <div style={{ fontFamily: serif, fontSize: 26, letterSpacing: "-0.01em" }}>RepoIQ</div>
-                <nav style={{ display: "flex", alignItems: "baseline", gap: 34, fontFamily: mono, fontSize: 12.5, letterSpacing: "0.02em" }}>
+                <nav className="rq-nav" style={{ fontFamily: mono, fontSize: 12.5, letterSpacing: "0.02em" }}>
                     <a href="#reads" style={{ color: c.muted }}>What it reads</a>
                     <a href="#shortlist" style={{ color: c.muted }}>Ranking</a>
                     <Link href="/analyze" style={{ color: c.ink, borderBottom: `1px solid ${c.accent}`, paddingBottom: 2 }}>
@@ -85,23 +81,23 @@ export default function Landing() {
             </header>
 
             {/* HERO */}
-            <section style={{ ...SHELL, padding: "70px 80px 96px" }}>
-                <div style={{ ...eyebrow, paddingBottom: 22, borderBottom: `1px solid ${c.rule}` }}>
+            <section style={shell(fluid(44, 70), fluid(56, 96))}>
+                <div className="rq-eyebrow" style={{ ...eyebrow, paddingBottom: 22, borderBottom: `1px solid ${c.rule}` }}>
                     <span>CANDIDATE INTELLIGENCE, FROM SOURCE</span>
                     <span>INDEX 00</span>
                 </div>
-                <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: 112, lineHeight: 0.98, letterSpacing: "-0.02em", margin: "44px 0 0", maxWidth: 1050 }}>
+                <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: fluid(40, 112), lineHeight: 0.98, letterSpacing: "-0.02em", margin: `${fluid(28, 44)} 0 0`, maxWidth: 1050 }}>
                     See what a candidate has{" "}
                     <span style={{ fontStyle: "italic", color: c.accent }}>actually built.</span>
                 </h1>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 48, marginTop: 56, alignItems: "end" }}>
-                    <p style={{ gridColumn: "span 2", fontSize: 18, lineHeight: 1.6, color: "oklch(38% 0.015 60)", maxWidth: 640, margin: 0 }}>
+                <div className="rq-hero" style={{ marginTop: fluid(34, 56) }}>
+                    <p style={{ fontSize: 18, lineHeight: 1.6, color: "oklch(38% 0.015 60)", maxWidth: 640, margin: 0 }}>
                         RepoIQ reads a candidate&apos;s real commit history, code quality, and
                         open-source impact — then renders it as a single, honest signal. It&apos;s the
                         clearest picture of an engineer&apos;s ability, drawn straight from the work
                         itself.
                     </p>
-                    <div style={{ fontFamily: mono, fontSize: 12.5, color: c.label, lineHeight: 1.9, textAlign: "right" }}>
+                    <div className="rq-hero-meta" style={{ fontFamily: mono, fontSize: 12.5, color: c.label, lineHeight: 1.9, textAlign: "right" }}>
                         <div>ANALYSIS TIME &nbsp;—&nbsp; &lt;8s</div>
                         <div>SIGNALS READ &nbsp;—&nbsp; 40+</div>
                         <div>RESUMES NEEDED &nbsp;—&nbsp; 0</div>
@@ -111,23 +107,23 @@ export default function Landing() {
 
             {/* SPECIMEN */}
             <section style={{ borderTop: `1px solid ${c.rule}`, borderBottom: `1px solid ${c.rule}` }}>
-                <div style={{ ...SHELL, padding: "30px 80px 60px" }}>
-                    <div style={{ ...eyebrow, marginBottom: 44 }}>
+                <div style={shell("30px", fluid(40, 60))}>
+                    <div className="rq-eyebrow" style={{ ...eyebrow, marginBottom: fluid(28, 44) }}>
                         <span>SPECIMEN — @jane-kaur</span>
                         <span>SAMPLE REPORT</span>
                     </div>
 
-                    <div style={{ display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: 72, alignItems: "center" }}>
+                    <div className="rq-split" style={{ alignItems: "center" }}>
                         <div>
                             <div style={{ display: "flex", alignItems: "flex-start", gap: 20 }}>
-                                <div style={{ fontFamily: serif, fontSize: 240, lineHeight: 0.8, letterSpacing: "-0.03em" }}>91</div>
+                                <div style={{ fontFamily: serif, fontSize: fluid(120, 240), lineHeight: 0.8, letterSpacing: "-0.03em" }}>91</div>
                                 <div style={{ fontFamily: mono, fontSize: 12, color: c.label, lineHeight: 1.8, paddingTop: 14 }}>
                                     <div style={{ color: c.accent }}>/ OUT OF 100</div>
                                     <div style={{ marginTop: 14 }}>STRONG SENIOR</div>
                                     <div>SIGNAL</div>
                                 </div>
                             </div>
-                            <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: 26, lineHeight: 1.35, color: c.body, margin: "28px 0 0", maxWidth: 460 }}>
+                            <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: fluid(20, 26), lineHeight: 1.35, color: c.body, margin: "28px 0 0", maxWidth: 460 }}>
                                 Consistent three-year contribution history. Maintains two
                                 widely-used libraries with a clean review record.
                             </p>
@@ -137,7 +133,7 @@ export default function Landing() {
                             <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: "0.06em", color: c.label, marginBottom: 14 }}>
                                 3-YEAR CONTRIBUTION FIELD
                             </div>
-                            <div style={{ display: "grid", gridTemplateColumns: "repeat(40, 1fr)", gap: 3, marginBottom: 40 }}>
+                            <div className="rq-heat" style={{ marginBottom: 40 }}>
                                 {heatCells(280).map((color, i) => (
                                     <div key={i} style={{ width: "100%", aspectRatio: 1, background: color }} />
                                 ))}
@@ -146,7 +142,7 @@ export default function Landing() {
                                 LANGUAGE PROFICIENCY
                             </div>
                             {heroLanguages.map((lang) => (
-                                <div key={lang.name} style={{ display: "grid", gridTemplateColumns: "110px 1fr 44px", alignItems: "center", gap: 16, padding: "9px 0", borderTop: `1px solid ${c.ruleSoft}` }}>
+                                <div key={lang.name} style={{ display: "grid", gridTemplateColumns: "clamp(72px, 20vw, 110px) 1fr 44px", alignItems: "center", gap: 16, padding: "9px 0", borderTop: `1px solid ${c.ruleSoft}` }}>
                                     <div style={{ fontSize: 14, color: c.body }}>{lang.name}</div>
                                     <div style={{ height: 5, background: c.track }}>
                                         <div style={{ height: "100%", width: `${lang.pct}%`, background: lang.barColor }} />
@@ -162,15 +158,15 @@ export default function Landing() {
             </section>
 
             {/* WHAT IT READS */}
-            <section id="reads" style={{ ...SHELL, padding: "80px 80px" }}>
-                <div style={{ ...eyebrow, marginBottom: 8 }}>
+            <section id="reads" style={shell(fluid(52, 80))}>
+                <div className="rq-eyebrow" style={{ ...eyebrow, marginBottom: 8 }}>
                     <span>WHAT REPOIQ READS</span>
                     <span>INDEX 01</span>
                 </div>
                 {features.map((f) => (
-                    <div key={f.n} style={{ display: "grid", gridTemplateColumns: "90px 1fr 1.15fr", gap: 40, alignItems: "baseline", padding: "30px 0", borderTop: `1px solid ${c.rule}` }}>
-                        <div style={{ fontFamily: serif, fontSize: 40, color: c.accentSoft, lineHeight: 1 }}>{f.n}</div>
-                        <div style={{ fontFamily: serif, fontSize: 30, letterSpacing: "-0.01em", lineHeight: 1.1 }}>{f.title}</div>
+                    <div key={f.n} className="rq-feature" style={{ padding: `${fluid(22, 30)} 0`, borderTop: `1px solid ${c.rule}` }}>
+                        <div style={{ fontFamily: serif, fontSize: fluid(28, 40), color: c.accentSoft, lineHeight: 1 }}>{f.n}</div>
+                        <div style={{ fontFamily: serif, fontSize: fluid(22, 30), letterSpacing: "-0.01em", lineHeight: 1.1 }}>{f.title}</div>
                         <div style={{ fontSize: 15.5, color: c.muted, lineHeight: 1.6 }}>{f.desc}</div>
                     </div>
                 ))}
@@ -178,30 +174,32 @@ export default function Landing() {
 
             {/* SHORTLIST */}
             <section id="shortlist" style={{ borderTop: `1px solid ${c.rule}` }}>
-                <div style={{ ...SHELL, padding: "80px 80px" }}>
-                    <div style={{ ...eyebrow, marginBottom: 16 }}>
+                <div style={shell(fluid(52, 80))}>
+                    <div className="rq-eyebrow" style={{ ...eyebrow, marginBottom: 16 }}>
                         <span>THE SHORTLIST, RANKED</span>
                         <span>INDEX 02</span>
                     </div>
-                    <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: 52, letterSpacing: "-0.02em", margin: "0 0 44px", maxWidth: 720, lineHeight: 1.05 }}>
+                    <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: fluid(30, 52), letterSpacing: "-0.02em", margin: `0 0 ${fluid(30, 44)}`, maxWidth: 720, lineHeight: 1.05 }}>
                         Every handle from a req, on one page.
                     </h2>
 
-                    <div style={{ display: "grid", gridTemplateColumns: SHORTLIST_COLS, padding: "0 0 14px", fontFamily: mono, fontSize: 11, letterSpacing: "0.05em", color: c.label, borderBottom: `1px solid ${c.ink}` }}>
+                    <div className="rq-row rq-row-head" style={{ padding: "0 0 14px", fontFamily: mono, fontSize: 11, letterSpacing: "0.05em", color: c.label, borderBottom: `1px solid ${c.ink}` }}>
                         <div>#</div><div>CANDIDATE</div><div>SCORE</div>
                         <div>STRONGEST IN</div><div>COMMITS/YR</div><div>IMPACT</div>
                     </div>
                     {candidates.map((cand) => (
-                        <div key={cand.rank} style={{ display: "grid", gridTemplateColumns: SHORTLIST_COLS, padding: "22px 0", alignItems: "center", borderBottom: `1px solid ${c.ruleSoft}` }}>
-                            <div style={{ fontFamily: mono, fontSize: 12.5, color: c.ghost }}>{cand.rank}</div>
-                            <div>
-                                <div style={{ fontFamily: serif, fontSize: 24, letterSpacing: "-0.01em" }}>{cand.name}</div>
+                        <div key={cand.rank} className="rq-row" style={{ padding: "22px 0", borderBottom: `1px solid ${c.ruleSoft}` }}>
+                            <div className="rq-cell-rank" style={{ fontFamily: mono, fontSize: 12.5, color: c.ghost }}>{cand.rank}</div>
+                            <div className="rq-cell-name">
+                                <div style={{ fontFamily: serif, fontSize: fluid(19, 24), letterSpacing: "-0.01em" }}>{cand.name}</div>
                                 <div style={{ fontFamily: mono, fontSize: 12, color: c.faint }}>{cand.handle}</div>
                             </div>
-                            <div style={{ fontFamily: serif, fontSize: 34, color: cand.scoreColor, lineHeight: 1 }}>{cand.score}</div>
-                            <div style={{ fontSize: 14, color: "oklch(35% 0.015 60)" }}>{cand.strength}</div>
-                            <div style={{ fontFamily: mono, fontSize: 14 }}>{cand.commits}</div>
-                            <div style={{ fontFamily: mono, fontSize: 12, letterSpacing: "0.04em", color: cand.impactColor }}>{cand.impact}</div>
+                            <div className="rq-cell-score" style={{ fontFamily: serif, fontSize: fluid(26, 34), color: cand.scoreColor, lineHeight: 1 }}>{cand.score}</div>
+                            <div className="rq-cell-meta">
+                                <div style={{ fontSize: 14, color: "oklch(35% 0.015 60)" }}>{cand.strength}</div>
+                                <div style={{ fontFamily: mono, fontSize: 14 }}>{cand.commits}</div>
+                                <div style={{ fontFamily: mono, fontSize: 12, letterSpacing: "0.04em", color: cand.impactColor }}>{cand.impact}</div>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -209,11 +207,11 @@ export default function Landing() {
 
             {/* CLOSING */}
             <section id="start" style={{ borderTop: `1px solid ${c.rule}` }}>
-                <div style={{ ...SHELL, padding: "110px 80px 120px", textAlign: "center" }}>
+                <div style={{ ...shell(fluid(64, 110), fluid(72, 120)), textAlign: "center" }}>
                     <div style={{ fontFamily: mono, fontSize: 12, letterSpacing: "0.06em", color: c.label, marginBottom: 30 }}>
                         INDEX 03 — BEGIN
                     </div>
-                    <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: 88, letterSpacing: "-0.02em", lineHeight: 1, margin: "0 0 40px" }}>
+                    <h2 style={{ fontFamily: serif, fontWeight: 400, fontSize: fluid(36, 88), letterSpacing: "-0.02em", lineHeight: 1, margin: "0 0 40px" }}>
                         Stop reading resumes.
                         <br />
                         <span style={{ fontStyle: "italic", color: c.accent }}>Start reading code.</span>
@@ -225,7 +223,7 @@ export default function Landing() {
             </section>
 
             {/* FOOTER */}
-            <footer style={{ ...SHELL, padding: "24px 80px 44px", display: "flex", justifyContent: "space-between", fontFamily: mono, fontSize: 12, color: c.faint, borderTop: `1px solid ${c.rule}` }}>
+            <footer className="rq-eyebrow" style={{ ...shell("24px", "44px"), fontFamily: mono, fontSize: 12, color: c.faint, borderTop: `1px solid ${c.rule}` }}>
                 <span>RepoIQ</span>
                 <span>SIGNAL, NOT RESUMES — © 2026</span>
             </footer>

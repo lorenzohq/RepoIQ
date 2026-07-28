@@ -133,6 +133,176 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   RepoIQ layout primitives.
+
+   The pages style themselves with inline styles, which cannot carry media
+   queries — so every grid that has to reflow lives here instead. Sizes that
+   only need to *scale* use clamp() inline; sizes that need to *rearrange*
+   use these classes.
+   ───────────────────────────────────────────────────────────── */
+
+/* Label row: "SECTION NAME" ←→ "INDEX 00" */
+.rq-eyebrow {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+.rq-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+}
+
+.rq-nav {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px clamp(16px, 2.6vw, 34px);
+}
+
+/* Hero: body copy beside a right-aligned stat column. */
+.rq-hero {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: clamp(28px, 3.6vw, 48px);
+  align-items: end;
+}
+
+@media (max-width: 860px) {
+  .rq-hero {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .rq-hero-meta {
+    text-align: left;
+  }
+}
+
+/* Score panel beside the data panel (landing specimen + live report). */
+.rq-split {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(40px, 5.5vw, 72px);
+}
+
+@media (max-width: 900px) {
+  .rq-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Contribution heatmap — cells are aspect-ratio 1, so only the gap needs help. */
+.rq-heat {
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
+  gap: clamp(1.5px, 0.28vw, 3px);
+}
+
+/* Numbered feature rows: 01 | title | description */
+.rq-feature {
+  display: grid;
+  grid-template-columns: 90px 1fr 1.15fr;
+  gap: clamp(14px, 3vw, 40px);
+  align-items: baseline;
+}
+
+@media (max-width: 860px) {
+  .rq-feature {
+    grid-template-columns: 52px 1fr;
+    row-gap: 10px;
+  }
+  /* Description drops under the title, still indented past the number. */
+  .rq-feature > :last-child {
+    grid-column: 2;
+  }
+}
+
+/* Ranked shortlist table. */
+.rq-row {
+  display: grid;
+  grid-template-columns: 40px 2fr 1fr 1.5fr 1fr 1fr;
+  align-items: center;
+}
+
+/* Wrapper is transparent on desktop so its children are direct grid items. */
+.rq-cell-meta {
+  display: contents;
+}
+
+@media (max-width: 900px) {
+  /* Column headers stop being meaningful once the row stacks. */
+  .rq-row-head {
+    display: none;
+  }
+  /* …but the rule they carried still has to open the table. */
+  .rq-row-head + .rq-row {
+    border-top: 1px solid currentColor;
+  }
+  .rq-row {
+    grid-template-columns: 34px 1fr auto;
+    grid-template-areas:
+      "rank name score"
+      ".    meta meta";
+    row-gap: 8px;
+    column-gap: 12px;
+    align-items: baseline;
+  }
+  .rq-cell-rank { grid-area: rank; }
+  .rq-cell-name { grid-area: name; }
+  .rq-cell-score { grid-area: score; }
+  /* Strength / commits / impact collapse onto one wrapped meta line. */
+  .rq-cell-meta {
+    display: flex;
+    grid-area: meta;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+  }
+}
+
+/* Repository rows: name | description | language | stars */
+.rq-repo {
+  display: grid;
+  grid-template-columns: 1.2fr 1.5fr 0.5fr 0.5fr;
+  gap: clamp(12px, 2.4vw, 32px);
+  align-items: baseline;
+}
+
+@media (max-width: 860px) {
+  .rq-repo {
+    grid-template-columns: 1fr auto;
+    gap: 8px 16px;
+  }
+  .rq-repo > :nth-child(-n + 2) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Handle input + submit button. */
+.rq-input-group {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  max-width: 640px;
+}
+
+.rq-input-group input {
+  min-width: 0;
+}
+
+@media (max-width: 560px) {
+  /* Button drops to its own full-width row rather than squeezing the input. */
+  .rq-input-btn {
+    flex: 1 0 100%;
+    padding-block: 16px;
+  }
+}
+
 @keyframes repoiq-dot {
   0%, 60%, 100% { opacity: 0.3; }
   30% { opacity: 1; }

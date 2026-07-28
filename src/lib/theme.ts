@@ -16,11 +16,28 @@ export const c = {
     bar: "oklch(45% 0.015 60)",
 } as const;
 
+/** Horizontal gutter — collapses from 80px down to 20px on narrow screens. */
+export const PAD = "clamp(20px, 5vw, 80px)";
+
 export const SHELL: React.CSSProperties = {
     maxWidth: 1320,
     margin: "0 auto",
-    padding: "0 80px",
+    paddingInline: PAD,
 };
+
+/** SHELL with fluid gutters plus explicit vertical padding. */
+export function shell(top: string, bottom: string = top): React.CSSProperties {
+    return { ...SHELL, paddingTop: top, paddingBottom: bottom };
+}
+
+/**
+ * Fluid size that reaches `max` at the 1320px shell width and never drops
+ * below `min`. Used for type and vertical rhythm so the layout scales without
+ * needing media queries for every value.
+ */
+export function fluid(min: number, max: number) {
+    return `clamp(${min}px, ${((max / 1320) * 100).toFixed(2)}vw, ${max}px)`;
+}
 
 export const mono = "var(--font-mono), ui-monospace, monospace";
 export const serif = "var(--font-serif), serif";

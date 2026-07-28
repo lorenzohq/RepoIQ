@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import type { Report } from "@/lib/report";
 import { normalizeHandle } from "@/lib/report";
-import { c, mono, serif, SHELL } from "@/lib/theme";
+import { c, fluid, mono, serif, shell } from "@/lib/theme";
 
 type State =
     | { status: "idle" }
@@ -14,8 +14,6 @@ type State =
     | { status: "result"; report: Report };
 
 const eyebrow: React.CSSProperties = {
-    display: "flex",
-    justifyContent: "space-between",
     fontFamily: mono,
     fontSize: 12,
     letterSpacing: "0.06em",
@@ -57,7 +55,7 @@ export default function Analyze() {
     return (
         <div style={{ color: c.ink, background: c.canvas, width: "100%", minHeight: "100vh", overflowX: "hidden" }}>
             {/* TOP BAR */}
-            <header style={{ ...SHELL, padding: "26px 80px", display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+            <header className="rq-header" style={shell("26px")}>
                 <Link href="/" style={{ fontFamily: serif, fontSize: 26, letterSpacing: "-0.01em", color: c.ink }}>
                     RepoIQ
                 </Link>
@@ -67,16 +65,16 @@ export default function Analyze() {
             </header>
 
             {/* INPUT */}
-            <section style={{ ...SHELL, padding: "60px 80px 0" }}>
-                <div style={{ ...eyebrow, paddingBottom: 22, borderBottom: `1px solid ${c.rule}` }}>
+            <section style={shell(fluid(40, 60), "0px")}>
+                <div className="rq-eyebrow" style={{ ...eyebrow, paddingBottom: 22, borderBottom: `1px solid ${c.rule}` }}>
                     <span>PASTE A GITHUB HANDLE</span>
                     <span>PUBLIC DATA ONLY</span>
                 </div>
-                <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: 76, lineHeight: 1, letterSpacing: "-0.02em", margin: "40px 0 36px", maxWidth: 820 }}>
+                <h1 style={{ fontFamily: serif, fontWeight: 400, fontSize: fluid(36, 76), lineHeight: 1, letterSpacing: "-0.02em", margin: `${fluid(28, 40)} 0 ${fluid(26, 36)}`, maxWidth: 820 }}>
                     Read any engineer <span style={{ fontStyle: "italic", color: c.accent }}>from source.</span>
                 </h1>
 
-                <div style={{ display: "flex", alignItems: "stretch", maxWidth: 640, border: `1px solid ${c.ink}`, background: c.surface }}>
+                <div className="rq-input-group" style={{ border: `1px solid ${c.ink}`, background: c.surface }}>
                     <div style={{ display: "flex", alignItems: "center", padding: "0 6px 0 20px", fontFamily: mono, fontSize: 18, color: c.faint }}>
                         @
                     </div>
@@ -95,7 +93,8 @@ export default function Analyze() {
                         onClick={run}
                         disabled={isLoading}
                         aria-busy={isLoading}
-                        style={{ border: "none", background: c.ink, color: c.canvas, fontFamily: mono, fontSize: 13, letterSpacing: "0.04em", padding: "0 28px", minWidth: 150, cursor: isLoading ? "wait" : "pointer" }}
+                        className="rq-input-btn"
+                        style={{ border: "none", background: c.ink, color: c.canvas, fontFamily: mono, fontSize: 13, letterSpacing: "0.04em", paddingInline: 28, minWidth: 150, cursor: isLoading ? "wait" : "pointer" }}
                     >
                         {isLoading ? (
                             <>
@@ -122,7 +121,7 @@ export default function Analyze() {
             </section>
 
             {/* STATES */}
-            <section style={{ ...SHELL, padding: "60px 80px 100px" }}>
+            <section style={shell(fluid(40, 60), fluid(64, 100))}>
                 {state.status === "loading" && (
                     <div style={{ fontFamily: mono, fontSize: 13, color: c.label, padding: "40px 0", borderTop: `1px solid ${c.rule}` }}>
                         READING COMMITS FOR @{state.query} …
@@ -134,14 +133,14 @@ export default function Analyze() {
                         <div style={{ fontFamily: mono, fontSize: 12, letterSpacing: "0.05em", color: c.accent, marginBottom: 10 }}>
                             NO SIGNAL
                         </div>
-                        <div style={{ fontFamily: serif, fontSize: 32 }}>{state.message}</div>
+                        <div style={{ fontFamily: serif, fontSize: fluid(23, 32) }}>{state.message}</div>
                     </div>
                 )}
 
                 {state.status === "result" && <ReportView r={state.report} />}
 
                 {state.status === "idle" && (
-                    <div style={{ borderTop: `1px solid ${c.rule}`, padding: "48px 0", fontFamily: serif, fontStyle: "italic", fontSize: 30, color: c.ghost, maxWidth: 620 }}>
+                    <div style={{ borderTop: `1px solid ${c.rule}`, padding: "48px 0", fontFamily: serif, fontStyle: "italic", fontSize: fluid(21, 30), color: c.ghost, maxWidth: 620 }}>
                         Enter a handle above to generate a live report — score, languages, and
                         top repositories, drawn straight from public GitHub data.
                     </div>
@@ -154,12 +153,12 @@ export default function Analyze() {
 function ReportView({ r }: { r: Report }) {
     return (
         <>
-            <div style={{ ...eyebrow, borderTop: `1px solid ${c.ink}`, paddingTop: 20, marginBottom: 44 }}>
+            <div className="rq-eyebrow" style={{ ...eyebrow, borderTop: `1px solid ${c.ink}`, paddingTop: 20, marginBottom: fluid(28, 44) }}>
                 <span>REPORT — @{r.login}</span>
                 <span>{r.joined}</span>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "0.9fr 1.1fr", gap: 72, alignItems: "start" }}>
+            <div className="rq-split" style={{ alignItems: "start" }}>
                 {/* Score + identity */}
                 <div>
                     <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 26 }}>
@@ -176,7 +175,7 @@ function ReportView({ r }: { r: Report }) {
                         </div>
                     </div>
                     <div style={{ display: "flex", alignItems: "flex-start", gap: 20 }}>
-                        <div style={{ fontFamily: serif, fontSize: 200, lineHeight: 0.78, letterSpacing: "-0.03em" }}>
+                        <div style={{ fontFamily: serif, fontSize: fluid(110, 200), lineHeight: 0.78, letterSpacing: "-0.03em" }}>
                             {r.score}
                         </div>
                         <div style={{ fontFamily: mono, fontSize: 12, color: c.label, lineHeight: 1.8, paddingTop: 12 }}>
@@ -185,7 +184,7 @@ function ReportView({ r }: { r: Report }) {
                             <div>{r.tierLine2}</div>
                         </div>
                     </div>
-                    <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: 24, lineHeight: 1.35, color: c.body, margin: "26px 0 0", maxWidth: 460 }}>
+                    <p style={{ fontFamily: serif, fontStyle: "italic", fontSize: fluid(19, 24), lineHeight: 1.35, color: c.body, margin: "26px 0 0", maxWidth: 460 }}>
                         {r.summary}
                     </p>
                 </div>
@@ -194,8 +193,8 @@ function ReportView({ r }: { r: Report }) {
                 <div>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1, background: c.rule, border: `1px solid ${c.rule}`, marginBottom: 40 }}>
                         {r.stats.map((s) => (
-                            <div key={s.label} style={{ background: c.surface, padding: "20px 22px" }}>
-                                <div style={{ fontFamily: serif, fontSize: 38, lineHeight: 1 }}>{s.value}</div>
+                            <div key={s.label} style={{ background: c.surface, padding: `20px ${fluid(14, 22)}` }}>
+                                <div style={{ fontFamily: serif, fontSize: fluid(27, 38), lineHeight: 1 }}>{s.value}</div>
                                 <div style={{ fontFamily: mono, fontSize: 11, letterSpacing: "0.05em", color: "oklch(50% 0.015 60)", marginTop: 6 }}>
                                     {s.label}
                                 </div>
@@ -207,7 +206,7 @@ function ReportView({ r }: { r: Report }) {
                         LANGUAGE PROFICIENCY
                     </div>
                     {r.languages.map((lang) => (
-                        <div key={lang.name} style={{ display: "grid", gridTemplateColumns: "130px 1fr 44px", alignItems: "center", gap: 16, padding: "9px 0", borderTop: `1px solid ${c.ruleSoft}` }}>
+                        <div key={lang.name} style={{ display: "grid", gridTemplateColumns: "clamp(78px, 22vw, 130px) 1fr 44px", alignItems: "center", gap: 16, padding: "9px 0", borderTop: `1px solid ${c.ruleSoft}` }}>
                             <div style={{ fontSize: 14, color: c.body }}>{lang.name}</div>
                             <div style={{ height: 5, background: c.track }}>
                                 <div style={{ height: "100%", width: lang.width, background: lang.color }} />
@@ -221,18 +220,18 @@ function ReportView({ r }: { r: Report }) {
             </div>
 
             {/* Top repositories */}
-            <div style={{ marginTop: 64 }}>
-                <div style={{ ...eyebrow, marginBottom: 8 }}>
+            <div style={{ marginTop: fluid(44, 64) }}>
+                <div className="rq-eyebrow" style={{ ...eyebrow, marginBottom: 8 }}>
                     <span>TOP REPOSITORIES</span>
                     <span>BY STARS</span>
                 </div>
                 {r.repos.map((repo) => (
-                    <div key={repo.url} style={{ display: "grid", gridTemplateColumns: "1.2fr 1.5fr 0.5fr 0.5fr", gap: 32, alignItems: "baseline", padding: "22px 0", borderTop: `1px solid ${c.rule}` }}>
+                    <div key={repo.url} className="rq-repo" style={{ padding: "22px 0", borderTop: `1px solid ${c.rule}` }}>
                         <a
                             href={repo.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{ fontFamily: serif, fontSize: 24, letterSpacing: "-0.01em", color: c.ink }}
+                            style={{ fontFamily: serif, fontSize: fluid(19, 24), letterSpacing: "-0.01em", color: c.ink, overflowWrap: "anywhere" }}
                         >
                             {repo.name}
                         </a>
