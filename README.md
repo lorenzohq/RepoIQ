@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RepoIQ
 
-## Getting Started
+Type any GitHub handle and get an editorial-style developer report — a 1–100 signal
+score, a tier, a language breakdown, headline stats, and the account's top repositories.
 
-First, run the development server:
+Built with Next.js 16, React 19, and TypeScript.
+
+## How it works
+
+RepoIQ reads only public GitHub data. Given a handle it fetches the user profile and
+up to 100 non-fork repositories, then derives:
+
+| Output | Derived from |
+| --- | --- |
+| **Score** (1–100) | Weighted blend of total stars (≤38), public repo count (≤18), followers (≤20), account age (≤12), and language diversity (≤12). Stars and followers are log-scaled so a handful of large repos doesn't swamp the result. |
+| **Tier** | `EARLY-CAREER` below 50, `SOLID MID` at 50, `STRONG SENIOR` at 70, `EXCEPTIONAL` at 85 |
+| **Languages** | Top 5 by weight, where each repo contributes `stars + 1` to its primary language |
+| **Top repos** | 5 highest-starred owned (non-fork) repositories |
+
+Nothing is written to disk or sent anywhere else — a report is computed per request and
+cached for an hour.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app runs at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env` file:
 
-## Learn More
+```bash
+# Optional. Raises the GitHub API limit from 60 to 5,000 requests/hour.
+# A classic token with no scopes is enough — only public data is read.
+GITHUB_TOKEN=ghp_...
+```
 
-To learn more about Next.js, take a look at the following resources:
+Without a token the app still works, but you will hit GitHub's unauthenticated rate
+limit quickly; the UI surfaces this as a "rate limit reached" message.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start the development server |
+| `pnpm build` | Production build |
+| `pnpm start` | Serve the production build |
+| `pnpm lint` | Run ESLint |
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/
+│   ├── page.tsx              Landing page
+│   ├── analyze/page.tsx      Handle input + live report
+│   ├── api/analyze/route.ts  GET /api/analyze?handle=<handle>
+│   └── globals.css           Design tokens + responsive layout primitives (.rq-*)
+└── lib/
+    ├── github.ts             GitHub fetching and scoring
+    ├── report.ts             Report types + handle normalization
+    └── theme.ts              Color scale, fonts, fluid sizing helpers
+drizzle/                      Postgres migrations (see Roadmap)
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Styling
+
+Pages are styled with inline styles driven by tokens in `src/lib/theme.ts`. Inline
+styles can't carry media queries, so the split is deliberate:
+
+- Values that only need to **scale** use `fluid(min, max)` / `clamp()` inline.
+- Layouts that need to **rearrange** use `.rq-*` classes in `globals.css`, which own
+  the breakpoints (860px and 900px).
+
+## API
+
+```http
+GET /api/analyze?handle=octocat
+```
+
+Handles are normalized first, so `octocat`, `@octocat`, and
+`https://github.com/octocat` all resolve the same way.
+
+**200** — a `Report` object (see `src/lib/report.ts`).
+
+**Errors** — `{ "error": string }` with status `400` (empty handle), `404` (no such
+user), `429` (GitHub rate limit), or `502` (GitHub unreachable).
+
+## Roadmap
+
+The `drizzle/` directory contains migrations for `users`, `stats`, and `tokens` tables
+intended for GitHub OAuth and cached profile stats. That schema is not wired into the
+app yet — the current build is stateless and needs no database to run.
+
+## License
+
+Not currently licensed for reuse.
